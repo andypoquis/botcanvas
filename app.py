@@ -6,6 +6,8 @@ from order import order_conv_handler
 from client import client_conv_handler, show_help
 from expired_subscriptions import expired_subscriptions_handler
 from balance import balance_handler
+from download_active_emails import download_active_emails_handler
+
 
 # Configuración del bot
 TOKEN = '7371100459:AAEpJ3lKAiQX8NFD5ExxHXPefKhw6PfPGbk'
@@ -25,6 +27,7 @@ def main():
     application.add_handler(CommandHandler('help', show_help))
     application.add_handler(expired_subscriptions_handler)
     application.add_handler(balance_handler)
+    application.add_handler(download_active_emails_handler)
 
     # Añadir handlers de conversación
     application.add_handler(order_conv_handler)
