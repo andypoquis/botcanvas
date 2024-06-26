@@ -26,11 +26,11 @@ async def download_active_emails(update: Update, context: CallbackContext) -> No
     # Crear un archivo CSV en memoria
     csv_file = StringIO()
     csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(['Nombre', 'Correo Electrónico', 'Teléfono'])
+    csv_writer.writerow(['Correo Electrónico'])
 
     for subscription in active_subscriptions:
         client = subscription['expand']['client']
-        csv_writer.writerow([client['name'], client['email'], client['phone_number']])
+        csv_writer.writerow([client['email']])
     
     csv_file.seek(0)
     
