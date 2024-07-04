@@ -7,6 +7,7 @@ from client import client_conv_handler, show_help
 from expired_subscriptions import expired_subscriptions_handler
 from balance import balance_handler
 from download_active_emails import download_active_emails_handler
+from send_promotion import send_promotion_handler
 
 
 # Configuración del bot
@@ -28,6 +29,7 @@ def main():
     application.add_handler(expired_subscriptions_handler)
     application.add_handler(balance_handler)
     application.add_handler(download_active_emails_handler)
+    application.add_handler(send_promotion_handler)
 
     # Añadir handlers de conversación
     application.add_handler(order_conv_handler)
@@ -35,6 +37,7 @@ def main():
     
     logger.info('Aplicación iniciada y lista para recibir comandos.')
     application.run_polling()
+
 
 if __name__ == '__main__':
     main()

@@ -51,6 +51,7 @@ async def show_help(update: Update, context) -> None:
         "/expired_subscriptions - Ver clientes con suscripciones vencidas\n"
         "/balance - Ver el balance actual\n"
         "/download_active_emails - Descargar correos electrónicos de suscripciones activas\n"
+        "/send_promotion - Enviar promoción a clientes activos\n"
         "/help - Mostrar este mensaje de ayuda\n"
         "/cancel - Cancelar la operación actual"
     )

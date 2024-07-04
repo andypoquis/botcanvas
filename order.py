@@ -18,7 +18,8 @@ async def start_order(update: Update, context) -> int:
 
 async def list_clients(update: Update, context) -> int:
     logger.info('Listando clientes')
-    response = requests.get('https://pocketbase-production-634a.up.railway.app/api/collections/clients/records?perPage=150')
+    today = datetime.now().strftime('%Y-%m-%d')
+    response = requests.get(f'https://pocketbase-production-634a.up.railway.app/api/collections/clients/records?filter=created={today}')
     clients = response.json().get('items', [])
     buttons = [[InlineKeyboardButton(client['name'], callback_data=client['id'])] for client in clients]
     keyboard = InlineKeyboardMarkup(buttons)
@@ -148,6 +149,8 @@ async def show_help(update: Update, context) -> None:
         "/create_client - Crear un nuevo cliente\n"
         "/expired_subscriptions - Ver clientes con suscripciones vencidas\n"
         "/balance - Ver el balance actual\n"
+        "/download_active_emails - Descargar correos electrónicos de suscripciones activas\n"
+        "/send_promotion - Enviar promoción a clientes activos\n"
         "/help - Mostrar este mensaje de ayuda\n"
         "/cancel - Cancelar la operación actual"
     )
