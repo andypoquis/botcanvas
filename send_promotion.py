@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext
 from datetime import datetime
 
-API_URL = 'https://pocketbase-production-634a.up.railway.app/api/collections/subscriptions/records'
+API_URL = 'https://pocketbase.similarity.canvasacademic.com/api/collections/subscriptions/records'
 
 PROMOTION_MESSAGE = (
     "📢 *¡Turnitin a Mitad de Precio!* 📢\n\n"

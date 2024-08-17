@@ -1,8 +1,10 @@
 import logging
-import requests
 from datetime import datetime
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackQueryHandler, CommandHandler, ConversationHandler, MessageHandler, filters
+
+import requests
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import (CallbackQueryHandler, CommandHandler,
+                          ConversationHandler, MessageHandler, filters)
 
 # Definir estados de la conversación para orden
 SELECT_CLIENT, SELECT_PRODUCT, SELECT_VARIANT, ENTER_START_DATE, ENTER_END_DATE, ENTER_PRICE, CONFIRM_SUBSCRIPTION, ADD_ANOTHER_SUBSCRIPTION, SELECT_STATUS = range(9)
@@ -18,8 +20,8 @@ async def start_order(update: Update, context) -> int:
 
 async def list_clients(update: Update, context) -> int:
     logger.info('Listando clientes')
-    today = datetime.now().strftime('%Y-%m-%d')
-    response = requests.get(f'https://pocketbase-production-634a.up.railway.app/api/collections/clients/records?filter=created={today}')
+    today_date = datetime.now().strftime('%Y-%m-%d')
+    response = requests.get(f'https://pocketbase.similarity.canvasacademic.com/api/collections/clients/records?filter=created>=%27{today_date}%27&expand=client&perPage=150')
     clients = response.json().get('items', [])
     buttons = [[InlineKeyboardButton(client['name'], callback_data=client['id'])] for client in clients]
     keyboard = InlineKeyboardMarkup(buttons)
@@ -30,7 +32,7 @@ async def list_products(update: Update, context) -> int:
     logger.info('Listando productos')
     query = update.callback_query
     context.user_data['client_id'] = query.data
-    response = requests.get('https://pocketbase-production-634a.up.railway.app/api/collections/products/records')
+    response = requests.get('https://pocketbase.similarity.canvasacademic.com/api/collections/products/records')
     products = response.json().get('items', [])
     buttons = [[InlineKeyboardButton(product['name'], callback_data=product['id'])] for product in products]
     keyboard = InlineKeyboardMarkup(buttons)
@@ -41,7 +43,7 @@ async def list_variants(update: Update, context) -> int:
     logger.info('Listando variantes')
     query = update.callback_query
     context.user_data['product_id'] = query.data
-    response = requests.get('https://pocketbase-production-634a.up.railway.app/api/collections/variants/records')
+    response = requests.get('https://pocketbase.similarity.canvasacademic.com/api/collections/variants/records')
     variants = response.json().get('items', [])
     buttons = [[InlineKeyboardButton(variant['name'], callback_data=variant['id'])] for variant in variants]
     keyboard = InlineKeyboardMarkup(buttons)
@@ -89,7 +91,7 @@ async def confirm_subscription(update: Update, context) -> int:
             "variant": context.user_data['variant_id'],
             "client": context.user_data['client_id']
         }
-        response = requests.post('https://pocketbase-production-634a.up.railway.app/api/collections/subscriptions/records', json=data)
+        response = requests.post('https://pocketbase.similarity.canvasacademic.com/api/collections/subscriptions/records', json=data)
         subscription = response.json()
         context.user_data['subscriptions'].append(subscription)
         await update.message.reply_text('Suscripción creada. ¿Deseas agregar otra suscripción? (si/no)')
@@ -130,7 +132,7 @@ async def create_order(update: Update, context) -> int:
         "status": context.user_data['status'],
         "client": context.user_data['client_id']
     }
-    response = requests.post('https://pocketbase-production-634a.up.railway.app/api/collections/orders/records', json=data)
+    response = requests.post('https://pocketbase.similarity.canvasacademic.com/api/collections/orders/records', json=data)
     order = response.json()
     await query.edit_message_text(f'Orden creada con ID: {order["id"]}')
     context.user_data.clear()  # Limpiar user_data para evitar acumulación de suscripciones

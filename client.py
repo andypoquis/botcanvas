@@ -29,7 +29,7 @@ async def save_client(update: Update, context) -> int:
         "phone_number": context.user_data['phone'],
         "email": context.user_data['email']
     }
-    response = requests.post('https://pocketbase-production-634a.up.railway.app/api/collections/clients/records', json=data)
+    response = requests.post('https://pocketbase.similarity.canvasacademic.com/api/collections/clients/records', json=data)
     if response.status_code == 200:
         client = response.json()
         await update.message.reply_text(f'Cliente creado exitosamente con ID: {client["id"]}')

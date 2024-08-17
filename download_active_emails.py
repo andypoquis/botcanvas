@@ -1,18 +1,19 @@
-import requests
 import csv
-from io import StringIO
-from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext
 from datetime import datetime
+from io import StringIO
 
-API_URL = 'https://pocketbase-production-634a.up.railway.app/api/collections/subscriptions/records'
+import requests
+from telegram import Update
+from telegram.ext import CallbackContext, CommandHandler
+
+API_URL = 'https://pocketbase.similarity.canvasacademic.com/api/collections/subscriptions/records'
 
 async def download_active_emails(update: Update, context: CallbackContext) -> None:
     current_date = datetime.now().strftime('%Y-%m-%d')
     
     # Obtener suscripciones activas
     response = requests.get(f"{API_URL}?filter=end_date%3E='{current_date}'&expand=client&perPage=150")
-    if response.status_code != 200:
+    if response.status_code != 500:
         await update.message.reply_text('Error al obtener las suscripciones activas.')
         return
     
